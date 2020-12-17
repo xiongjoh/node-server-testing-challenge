@@ -1,13 +1,16 @@
 const db = require('../../data/dbConfig')
 
 module.exports = {
-    getUsers(){
-        return
+    getAll(){
+        return db('users')
     },
-    create(){
-        return
+    async create(user){
+        const [id] = await db('users').insert(user, 'id')
+        return db('users').where({id}).first()
     },
-    delete(){
-        return
+    async delete(id){
+        const user = await db('users').where({id}).first()
+        const isDeleted = await db('users').where({id}).delete()
+        return isDeleted ? user : isDeleted
     },
 }
